@@ -58,12 +58,13 @@ def read_mode():
     print("Выберите способ ввода:")
     print("1 - ввод в консоли")
     print("2 - ввод из файла")
+    print("3 - генерация матрицы")
     try:
         mode = int(input())
     except:
         exit_with_error("Режим должен быть числом!")
-    if mode < 1 or mode > 2:
-        exit_with_error("Режим должен быть от 1 до 2 включительно!")
+    if mode < 1 or mode > 3:
+        exit_with_error("Режим должен быть от 1 до 3 включительно!")
     return mode
 
 def print_matrix(matrix):
@@ -80,8 +81,8 @@ def print_vector(vector, sym):
 def print_system(a, b):
     n = len(a)
     for i in range(n):
-        equation = " + ".join(f"{a[i][j]}x{to_lower_unicode(j + 1)}" for j in range(n))
-        equation += f" = {b[i]}"
+        equation = " + ".join(f"{_round(a[i][j], 2)}x{to_lower_unicode(j + 1)}" for j in range(n))
+        equation += f" = {_round(b[i], 2)}"
         print(equation)
 
 # ----------------------------------------MATRIX UTILS-----------------------------------------------------------
@@ -202,28 +203,45 @@ def numpy_equation_solver(a, b):
     x = np.linalg.solve(a, b)
     return x
 
+def generate_random_matrix(n):
+    a = []
+    b = []
+    for i in range(n):
+        c = []
+        for j in range(n):
+            c.append(np.random.rand() * 10)
+        a.append(c)
+        b.append(np.random.rand() * 10)
+    return a, b
+
 # ----------------------------------------------------MAIN-----------------------------------------------------------
 
 def main():
     print("Решение СЛАУ методом Гаусса")
     mode = read_mode()
     file = None
-    if mode == 2:
+    if mode == 1:
+        print("Выбран ввод в консоли")
+    elif mode == 2:
         print("Выбран ввод из файла")
         filename = input("Введите имя файла: ")
         try:
             file = open(filename)
         except:
             exit_with_error("Файл не найден!")
-    else:
-        print("Выбран ввод в консоли")
-        
+    elif mode == 3: 
+        print("Выбран режим генерации случайной матрицы")
+    
     n = read_n(file=file)
-    matrix = read_matrix(n, file=file)
+    if mode != 3:
+        matrix = read_matrix(n, file=file)
+        a, b = split_matrix(matrix)
+    else:
+        a, b = generate_random_matrix(n)
 
-    if mode == 2: file.close()
+    if mode == 2:
+        file.close()
 
-    a, b = split_matrix(matrix)
     print("Считанная система:")
     print_system(a, b)
 
