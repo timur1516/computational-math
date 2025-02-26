@@ -43,8 +43,8 @@ def read_matrix(n, file=None):
     if file == None: print("Введите матрицу построчно (и A и B):")
     for _ in range(n):
         try:
-            if file == None: row = list(map(int, input().split()))
-            else: row = list(map(int, file.readline().split()))
+            if file == None: row = list(map(float, input().split()))
+            else: row = list(map(float, file.readline().split()))
         except:
             exit_with_error("Элементы матрицы должны быть числами!", file)
         if len(row) != n + 1:
