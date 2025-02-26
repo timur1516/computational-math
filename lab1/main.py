@@ -72,9 +72,9 @@ def print_matrix(matrix):
             print(_round(c, 2), end='\t')
         print()
 
-def print_vector(vector):
-    for c in vector:
-        print(_round(c, 2), end=' ')
+def print_vector(vector, sym):
+    for i in range(len(vector)):
+        print(f'{sym}{to_lower_unicode(i + 1)} = {_round(vector[i], 2)}')
     print()
 
 def print_system(a, b):
@@ -237,15 +237,15 @@ def main():
     print("Треугольная матрица:")
     print_matrix(triangle_matrix)
     print("Решение системы методом Гаусса:")
-    print_vector(x_gauss)
+    print_vector(x_gauss, 'x')
 
     x_numpy = numpy_equation_solver(a, b)
     print("Решение системы через numpy:")
-    print_vector(x_numpy)
+    print_vector(x_numpy, 'x')
 
     r = calculate_r(a, b, x_gauss)
     print("Невязка:")
-    print_vector(r)
+    print_vector(r, 'r')
 
 if __name__ == "__main__":
     main()
