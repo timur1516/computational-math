@@ -89,14 +89,16 @@ def print_system(a, b):
 def transform_matrix_to_triangle(matrix):
     n = len(matrix) 
     m = len(matrix[0])
+    cnt = 0
     for i in range(n):
         if matrix[i][i] == 0:
             l = i
-            for m in range(i+1, n):
-                if matrix[m][i] != 0:
-                    l = m
+            for k in range(i+1, n):
+                if matrix[k][i] != 0:
+                    l = k
                     break
             if l != i:
+                cnt += 1
                 for j in range(i, m):
                     matrix[i][j], matrix[l][j] = matrix[l][j], matrix[i][j]
             else:
@@ -106,17 +108,18 @@ def transform_matrix_to_triangle(matrix):
             matrix[k][i] = 0
             for j in range(i + 1, m):
                 matrix[k][j] = matrix[k][j] - matrix[i][j] * c
+    return cnt
 
 def det(matrix):
     n = len(matrix)
     if n != len(matrix[0]):
         exit_with_error("Матрица должна быть квадратной!")
     tmp = copy.deepcopy(matrix)
-    transform_matrix_to_triangle(tmp)
+    k = transform_matrix_to_triangle(tmp)
     det = 1
     for i in range(n):
         det *= tmp[i][i]
-    return det
+    return det * (-1)**k
 
 def rang(matrix):
     tmp = copy.deepcopy(matrix)
