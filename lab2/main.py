@@ -1,28 +1,92 @@
-from tabulate import tabulate
+from lab2.drawer import draw_equation
+from lab2.equation_solver import EquationSolver
+from lab2.io.reader import ConsoleReader, FileReader
+from lab2.io.util import print_log, choose_options, read_filename, read_root_limits, read_eps, read_initial_point
+from lab2.io.writer import ConsoleWriter, FileWriter
+from lab2.non_linear.multi_equation import MultiEquation
+from lab2.non_linear.simple_equation import SimpleEquation
+from lab2.non_linear.system_of_equations import SystemOfEquations
+from lab2.system_solver import SystemSolver
 
-from lab2.chord_method import ChordMethod
-from lab2.simple_equation import SimpleEquation
-from lab2.secant_method import SecantMethod
-from lab2.simple_iterations_method import SimpleIterationsMethod
+LOG_DECIMALS = 2
+MODES = ['Нелинейное уравнение', 'Система нелинейных уравнений']
+EQUATIONS = [
+    SimpleEquation(lambda x: x ** 3 - x + 4, 'x^3 - x + 4'),
+    SimpleEquation(lambda x: x ** 3 - x + 4, 'x^3 - x + 4')
+]
+SYSTEMS = [
+    SystemOfEquations([
+        MultiEquation(lambda x_: x_[0] ** 2 + x_[1] ** 2 - 4, 'ss'),
+        MultiEquation(lambda x_: -3 * x_[0] ** 2 + x_[1], 'fd')
+    ]),
+    SystemOfEquations([
+        MultiEquation(lambda x_: x_[0] ** 2 + x_[1] ** 2 - 4, 'ss'),
+        MultiEquation(lambda x_: -3 * x_[0] ** 2 + x_[1], 'fd')
+    ])
+]
+EQ_METHODS_STRS = ['Метод хорд', 'Метод секущих', 'Метод простых итераций']
+EQ_METHODS = ['chord', 'secant', 'simple_iterations']
+SYS_METHODS_STRS = ['Метод Ньютона']
+SYS_METHODS = ['newton']
+IO_METHODS = ['Консоль', 'Файл']
 
 
-def print_result(method):
-    result = method.solve()
-    print(f'Найденный корень: {result.x}')
-    print(f'Потребовалось итераций: {result.iterations}')
-    print('Лог решения:')
-    print(tabulate(result.log[1:], result.log[:1][0], tablefmt='pretty'))
+def print_result(result, writer):
+    writer.write(f'Найденный корень: {result.x}')
+    writer.write(f'Потребовалось итераций: {result.iterations}')
+    writer.write('Лог решения:')
+    print_log(result.log, writer, LOG_DECIMALS)
 
 
 def main():
-    equation = SimpleEquation(lambda x: x ** 3 - x + 4, 'x^3 - x + 4')
-    chord_method = ChordMethod(equation, -2, -1, eps=1e-2, do_plot=True, do_log=True, log_decimals=5)
-    secant_method = SecantMethod(equation, -2, -1, eps=1e-2, do_plot=True, do_log=True, log_decimals=5)
-    simple_iterations_method = SimpleIterationsMethod(equation, -2, -1, eps=1e-2, do_plot=True, do_log=True,
-                                                      log_decimals=5)
-    print_result(chord_method)
-    print_result(secant_method)
-    print_result(simple_iterations_method)
+    mode = choose_options('Выберите что будете решать', MODES)
+
+    if mode == 1:
+        equation_id = choose_options('Выберите уравнение', EQUATIONS) - 1
+        method_id = choose_options('Выберите метод', EQ_METHODS_STRS) - 1
+
+        intput_mode = choose_options('Выберите способ ввода границ интервала и точности', IO_METHODS)
+        reader = ConsoleReader()
+        if intput_mode == 2:
+            filename = read_filename()
+            reader = FileReader(filename)
+
+        left, right = read_root_limits(reader)
+        eps = read_eps(reader)
+        equation_solver = EquationSolver(EQUATIONS[equation_id], EQ_METHODS[method_id], left, right, eps)
+        result = equation_solver.solve()
+
+        output_mode = choose_options('Выберите способ вывода ответа', IO_METHODS)
+        writer = ConsoleWriter()
+        if output_mode == 2:
+            filename = read_filename()
+            writer = FileWriter(filename)
+
+        print_result(result, writer)
+        draw_equation(result.x, left, right, equation_solver.equation)
+
+    if mode == 2:
+        system_id = choose_options('Выберите систему', SYSTEMS) - 1
+        method_id = choose_options('Выберите метод', SYS_METHODS_STRS) - 1
+
+        intput_mode = choose_options('Выберите способ ввода границ интервала и точности', IO_METHODS)
+        reader = ConsoleReader()
+        if intput_mode == 2:
+            filename = read_filename()
+            reader = FileReader(filename)
+
+        initial_point = read_initial_point(reader, SYSTEMS[system_id].n)
+        eps = read_eps(reader)
+        system_solver = SystemSolver(SYSTEMS[system_id], SYS_METHODS[method_id], initial_point, eps)
+        result = system_solver.solve()
+
+        output_mode = choose_options('Выберите способ вывода ответа', IO_METHODS)
+        writer = ConsoleWriter()
+        if output_mode == 2:
+            filename = read_filename()
+            writer = FileWriter(filename)
+
+        print_result(result, writer)
 
 
 if __name__ == '__main__':

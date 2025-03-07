@@ -1,11 +1,9 @@
-from lab2.method import Method
+from lab2.methods.equation.equation_method import EquationMethod
 
 
-class SecantMethod(Method):
-    def log_header_creator(self):
-        self.log.append(['#', 'x_{i-1}', 'x_i', 'x_{i+1}', 'f(x_{i+1})', 'delta'])
+class SecantMethod(EquationMethod):
 
-    def solver(self):
+    def solve(self):
         f = self.equation.f
         f__ = self.equation.snd_derivative
         a = self.left
@@ -25,15 +23,13 @@ class SecantMethod(Method):
             x = x1 - f(x1) * (x1 - x0) / (f(x1) - f(x0))
             delta = abs(x - x1)
 
-            if self.do_log:
-                self.log.append([
-                    str(self.iterations),
-                    str(self._round(x0)),
-                    str(self._round(x1)),
-                    str(self._round(x)),
-                    str(self._round(f(x))),
-                    str(self._round(delta))
-                ])
+            self.log.append({
+                'x_{i-1}': x0,
+                'x_i': x1,
+                'x_{i+1}': x,
+                'f(x_{i+1})': f(x),
+                'delta': delta
+            })
 
             if delta < self.eps:
                 break

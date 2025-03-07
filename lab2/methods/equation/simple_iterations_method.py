@@ -1,14 +1,12 @@
 import numpy as np
 from scipy.differentiate import derivative
 
-from lab2.method import Method
+from lab2.methods.equation.equation_method import EquationMethod
 
 
-class SimpleIterationsMethod(Method):
-    def log_header_creator(self):
-        self.log.append(['#', 'x_i', 'x_{i+1}', 'phi(x_{i+1})', 'f(x_{i+1})', 'delta'])
+class SimpleIterationsMethod(EquationMethod):
 
-    def solver(self):
+    def solve(self):
         f = self.equation.f
         f_ = self.equation.fst_derivative
         a = self.left
@@ -23,7 +21,7 @@ class SimpleIterationsMethod(Method):
         phi_ = lambda x: derivative(phi, x).df
         q = np.max(abs(phi_(np.linspace(a, b, int(1 / self.eps)))))
         if q > 1:
-            raise Exception(f'Метод не сходится так как значение q = {self._round(q)} >= 1')
+            raise Exception(f'Метод не сходится так как значение q >= 1')
 
         prev_x = a
         while True:
@@ -31,15 +29,13 @@ class SimpleIterationsMethod(Method):
             x = phi(prev_x)
             delta = abs(x - prev_x)
 
-            if self.do_log:
-                self.log.append([
-                    str(self.iterations),
-                    str(self._round(prev_x)),
-                    str(self._round(x)),
-                    str(self._round(phi(x))),
-                    str(self._round(f(x))),
-                    str(self._round(delta))
-                ])
+            self.log.append({
+                'x_i': prev_x,
+                'x_{i+1}': x,
+                'phi(x_{i+1})': phi(x),
+                'f(x_{i+1})': f(x),
+                'delta': delta
+            })
 
             if delta <= self.eps:
                 break

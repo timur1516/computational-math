@@ -1,7 +1,7 @@
 from scipy.differentiate import derivative
 
 
-class Equation:
+class MultiEquation:
     def __init__(self, f, text):
         self.f = f
         self.text = text
