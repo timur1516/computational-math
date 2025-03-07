@@ -3,6 +3,9 @@ class SystemOfEquations:
         self.equations = equations
         self.n = len(equations)
 
+    def __str__(self):
+        return '{' + ''.join(f'{str(eq)}; ' for eq in self.equations) + '}'
+
     def partial_derivative(self, x, i, j):
         return self.equations[i].partial_derivative(x, j)
 

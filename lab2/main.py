@@ -1,4 +1,6 @@
-from lab2.drawer import draw_equation
+import numpy as np
+
+from lab2.drawer import draw_equation, draw_system
 from lab2.equation_solver import EquationSolver
 from lab2.io.reader import ConsoleReader, FileReader
 from lab2.io.util import print_log, choose_options, read_filename, read_root_limits, read_eps, read_initial_point
@@ -16,12 +18,12 @@ EQUATIONS = [
 ]
 SYSTEMS = [
     SystemOfEquations([
-        MultiEquation(lambda x_: x_[0] ** 2 + x_[1] ** 2 - 4, 'ss'),
-        MultiEquation(lambda x_: -3 * x_[0] ** 2 + x_[1], 'fd')
+        MultiEquation(lambda x_: x_[0] ** 2 + x_[1] ** 2 - 4, 'x^2 + y^2 = 4'),
+        MultiEquation(lambda x_: -3 * x_[0] ** 2 + x_[1], 'y = 3x^2')
     ]),
     SystemOfEquations([
-        MultiEquation(lambda x_: x_[0] ** 2 + x_[1] ** 2 - 4, 'ss'),
-        MultiEquation(lambda x_: -3 * x_[0] ** 2 + x_[1], 'fd')
+        MultiEquation(lambda x_: x_[0] ** 2 + x_[1] ** 2 - 4, 'x^2 + y^2 = 4'),
+        MultiEquation(lambda x_: x_[1] - np.sin(x_[0]), 'y = sin(x)')
     ])
 ]
 EQ_METHODS_STRS = ['Метод хорд', 'Метод секущих', 'Метод простых итераций']
@@ -87,6 +89,7 @@ def main():
             writer = FileWriter(filename)
 
         print_result(result, writer)
+        draw_system(result.x, initial_point, SYSTEMS[system_id])
 
 
 if __name__ == '__main__':

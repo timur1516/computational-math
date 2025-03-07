@@ -9,7 +9,7 @@ def draw_equation(x0, left, right, equation):
     l = left - side_step
     r = right + side_step
 
-    plt.figure(figsize=(10, 6))
+    plt.figure(figsize=(10, 10))
 
     x = np.linspace(l, r, 1000)
     y = equation.f(x)
@@ -36,4 +36,36 @@ def draw_equation(x0, left, right, equation):
     plt.grid(True, linestyle='--', alpha=0.7)
     plt.legend()
     plt.xlim(l, r)
+    plt.show()
+
+
+def draw_system(x0, point, system):
+    if system.n > 2: return
+    r = np.sqrt(max(x0[0] ** 2 + x0[1] ** 2, point[0] ** 2 + point[1] ** 2)) * 1.5
+    x_min, x_max = -r, r
+    y_min, y_max = -r, r
+
+    plt.figure(figsize=(10, 10))
+
+    x = np.linspace(x_min, x_max, 1000)
+    y = np.linspace(y_min, y_max, 1000)
+    x, y = np.meshgrid(x, y)
+    f = system.equations[0].f([x, y])
+    g = system.equations[1].f([x, y])
+    plt.contour(x, y, f, levels=[0], colors='blue')
+    plt.contour(x, y, g, levels=[0], colors='green')
+
+    plt.scatter([x0[0]], [x0[1]], label=f'({_round(x0[0], 3)}; {_round(x0[1], 3)})', color='red', s=50)
+    plt.scatter([point[0]], [point[1]], label=f'({_round(point[0], 3)}; {_round(point[1], 3)})', color='black', s=50)
+
+    plt.axhline(0, color='black')
+
+    plt.title(f'График функции f(x)={system.equations[0].text}')
+    plt.title(f'График функции g(x)={system.equations[1].text}')
+    plt.xlabel('x')
+    plt.ylabel('y')
+    plt.grid(True, linestyle='--', alpha=0.7)
+    plt.legend()
+    plt.xlim(x_min, x_max)
+    plt.ylim(y_min, y_max)
     plt.show()
