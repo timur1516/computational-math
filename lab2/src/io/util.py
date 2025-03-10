@@ -1,6 +1,26 @@
 from tabulate import tabulate
 
-from lab2.src.io.reader import FileReader
+from lab2.src.io.reader import FileReader, ConsoleReader
+from lab2.src.io.writer import ConsoleWriter, FileWriter
+from lab2.src.settings.constants import IO_METHODS
+
+
+def create_reader():
+    intput_mode = choose_options('Выберите способ ввода границ интервала и точности', IO_METHODS)
+    reader = ConsoleReader()
+    if intput_mode == 2:
+        filename = read_filename('r')
+        reader = FileReader(filename)
+    return reader
+
+
+def create_writer():
+    output_mode = choose_options('Выберите способ вывода ответа', IO_METHODS)
+    writer = ConsoleWriter()
+    if output_mode == 2:
+        filename = read_filename('w')
+        writer = FileWriter(filename)
+    return writer
 
 
 def print_log(log, writer, log_decimals):
@@ -12,6 +32,13 @@ def print_log(log, writer, log_decimals):
         for item in log
     ]
     writer.write(tabulate(data, header, tablefmt='pretty', showindex=True))
+
+
+def print_result(result, writer, log_decimals):
+    writer.write(f'Найденный корень: {result.x}')
+    writer.write(f'Потребовалось итераций: {result.iterations}')
+    writer.write('Лог решения:')
+    print_log(result.log, writer, log_decimals)
 
 
 def choose_options(message, options):

@@ -1,7 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
-from lab2.src.util import _round
+from lab2.src.util.io_util import _round
 
 
 def draw_equation(x0, left, right, equation):
