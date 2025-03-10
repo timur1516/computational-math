@@ -26,8 +26,8 @@ def create_writer():
 def print_log(log, writer, log_decimals):
     header = list(log[0].keys())
     data = [
-        [f"{v:.{log_decimals}f}" if isinstance(v, (int, float)) else
-         [f"{num:.{log_decimals}f}" for num in v] if isinstance(v, list) else str(v)
+        [f'{v:.{log_decimals}f}' if isinstance(v, (int, float)) else
+         [f'{num:.{log_decimals}f}' for num in v] if isinstance(v, list) else str(v)
          for v in item.values()]
         for item in log
     ]
