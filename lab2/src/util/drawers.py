@@ -35,6 +35,7 @@ def draw_equation(x0, left, right, equation):
     plt.ylabel('y')
     plt.grid(True, linestyle='--', alpha=0.7)
     plt.legend()
+    plt.tight_layout()
     plt.xlim(l, r)
     plt.show()
 
@@ -66,6 +67,7 @@ def draw_system(x0, point, system):
     plt.ylabel('y')
     plt.grid(True, linestyle='--', alpha=0.7)
     plt.legend()
+    plt.tight_layout()
     plt.xlim(x_min, x_max)
     plt.ylim(y_min, y_max)
     plt.show()

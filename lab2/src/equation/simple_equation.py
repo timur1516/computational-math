@@ -19,7 +19,7 @@ class SimpleEquation:
     def is_single_root_exist(self, left, right):
         if self.f(left) * self.f(right) > 0:
             return False
-        for x in np.linspace(left, right, (right - left) * 10):
+        for x in np.linspace(left, right, int((right - left) * 10)):
             if self.fst_derivative(left) * self.fst_derivative(x) < 0:
                 return False
         return True
