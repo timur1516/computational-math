@@ -2,6 +2,7 @@ import numpy as np
 from scipy.differentiate import derivative
 
 from lab2.src.dto.result import Result
+from lab2.src.settings.congif import MAX_ITERATIONS
 
 
 def chord_method(equation, a, b, eps):
@@ -12,6 +13,8 @@ def chord_method(equation, a, b, eps):
     x = (a * f(b) - b * f(a)) / (f(b) - f(a))
 
     while True:
+        if iterations == MAX_ITERATIONS:
+            raise Exception(f'Произведено {MAX_ITERATIONS} итераций, но решение не найдено.')
         iterations += 1
 
         if f(a) * f(x) <= 0:
@@ -58,6 +61,8 @@ def secant_method(equation, a, b, eps):
     x1 = x0 + eps
 
     while True:
+        if iterations == MAX_ITERATIONS:
+            raise Exception(f'Произведено {MAX_ITERATIONS} итераций, но решение не найдено.')
         iterations += 1
 
         x = x1 - f(x1) * (x1 - x0) / (f(x1) - f(x0))
@@ -99,7 +104,10 @@ def simple_iteration_method(equation, a, b, eps):
 
     prev_x = a
     while True:
+        if iterations == MAX_ITERATIONS:
+            raise Exception(f'Произведено {MAX_ITERATIONS} итераций, но решение не найдено.')
         iterations += 1
+
         x = phi(prev_x)
         delta = abs(x - prev_x)
 

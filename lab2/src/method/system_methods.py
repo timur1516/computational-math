@@ -1,6 +1,7 @@
 import numpy as np
 
 from lab2.src.dto.result import Result
+from lab2.src.settings.congif import MAX_ITERATIONS
 
 
 def newton_method(system, x0, eps):
@@ -8,6 +9,8 @@ def newton_method(system, x0, eps):
     iterations = 0
     log = []
     while True:
+        if iterations == MAX_ITERATIONS:
+            raise Exception(f'Произведено {MAX_ITERATIONS} итераций, но решение не найдено.')
         iterations += 1
 
         jcb = system.get_jacobi(x)
