@@ -1,3 +1,4 @@
+import numpy as np
 from scipy.differentiate import derivative
 
 
@@ -16,4 +17,9 @@ class SimpleEquation:
         return derivative(self.fst_derivative, x).df
 
     def is_single_root_exist(self, left, right):
-        return self.f(left) * self.f(right) <= 0 <= self.fst_derivative(left) * self.fst_derivative(right)
+        if self.f(left) * self.f(right) > 0:
+            return False
+        for x in np.linspace(left, right, (right - left) * 10):
+            if self.fst_derivative(left) * self.fst_derivative(x) < 0:
+                return False
+        return True

@@ -11,17 +11,17 @@ def main():
     if mode == 1:
         equation_id = choose_options('Выберите уравнение', EQUATIONS) - 1
         method_id = choose_options('Выберите метод', EQ_METHODS_STRS) - 1
-
-        reader = create_reader()
-
-        a, b = read_root_limits(reader)
-        eps = read_eps(reader)
         method = EQ_METHODS[method_id]
         equation = EQUATIONS[equation_id]
+        reader = create_reader()
+        a, b = read_root_limits(reader)
+
+        if not equation.is_single_root_exist(a, b):
+            raise Exception('На выбранном отрезке нет корней либо их больше одного')
+
+        eps = read_eps(reader)
         result = method(equation, a, b, eps)
-
         writer = create_writer()
-
         print_result(result, writer, LOG_DECIMALS)
         draw_equation(result.x, a, b, equation)
 
