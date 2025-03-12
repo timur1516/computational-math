@@ -11,5 +11,9 @@ SYSTEMS = [
     SystemOfEquations([
         MultiEquation(lambda x_: x_[0] ** 2 + x_[1] ** 2 - 4, 'x^2 + y^2 = 4'),
         MultiEquation(lambda x_: x_[1] - np.sin(x_[0]), 'y = sin(x)')
+    ]),
+    SystemOfEquations([
+        MultiEquation(lambda x_: x_[0] ** 2 + x_[1] ** 2 - 6, 'x^2 + y^2 = 6'),
+        MultiEquation(lambda x_: x_[1] - np.tan(x_[0]), 'y = tg(x)')
     ])
 ]

@@ -60,6 +60,7 @@ def draw_system(x0, point, system):
     plt.scatter([point[0]], [point[1]], label=f'({_round(point[0], 3)}; {_round(point[1], 3)})', color='black', s=50)
 
     plt.axhline(0, color='black')
+    plt.axvline(0, color='black')
 
     plt.title(f'График функции f(x)={system.equations[0].text}')
     plt.title(f'График функции g(x)={system.equations[1].text}')

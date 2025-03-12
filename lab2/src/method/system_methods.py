@@ -15,7 +15,10 @@ def newton_method(system, x0, eps):
 
         jcb = system.get_jacobi(x)
         b = system.get_value(x)
-        dx = np.linalg.solve(np.array(jcb), -1 * np.array(b))
+        try:
+            dx = np.linalg.solve(np.array(jcb), -1 * np.array(b))
+        except np.linalg.LinAlgError:
+            raise Exception('Не удалось применить метод, промежуточная система не имеет решений!')
         nx = x + dx
 
         log.append({
