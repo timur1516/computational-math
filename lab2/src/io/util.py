@@ -3,6 +3,7 @@ from tabulate import tabulate
 from lab2.src.io.reader import FileReader, ConsoleReader
 from lab2.src.io.writer import ConsoleWriter, FileWriter
 from lab2.src.settings.constants import IO_METHODS
+from lab2.src.util.io_util import _round
 
 
 def create_reader():
@@ -34,8 +35,9 @@ def print_log(log, writer, log_decimals):
     writer.write(tabulate(data, header, tablefmt='pretty', showindex=True))
 
 
-def print_result(result, writer, log_decimals):
+def print_result(result, real_root, writer, log_decimals):
     writer.write(f'Найденный корень: {result.x}')
+    writer.write(f'Истинный корень: {real_root}')
     writer.write(f'Потребовалось итераций: {result.iterations}')
     writer.write('Лог решения:')
     print_log(result.log, writer, log_decimals)
