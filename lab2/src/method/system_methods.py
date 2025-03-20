@@ -1,7 +1,7 @@
 import numpy as np
 
 from lab2.src.dto.result import Result
-from lab2.src.settings.congif import MAX_ITERATIONS
+from lab2.src.settings.config import MAX_ITERATIONS
 
 
 def newton_method(system, x0, eps):

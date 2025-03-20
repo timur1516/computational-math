@@ -1,7 +1,7 @@
 from scipy.optimize import root
 
 from lab2.src.io.util import *
-from lab2.src.settings.congif import LOG_DECIMALS
+from lab2.src.settings.config import LOG_DECIMALS
 from lab2.src.settings.constants import *
 from lab2.src.settings.equations import EQUATIONS
 from lab2.src.settings.systems import SYSTEMS

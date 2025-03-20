@@ -2,7 +2,7 @@ import numpy as np
 from scipy.differentiate import derivative
 
 from lab2.src.dto.result import Result
-from lab2.src.settings.congif import MAX_ITERATIONS
+from lab2.src.settings.config import MAX_ITERATIONS
 
 
 def chord_method(equation, a, b, eps):
