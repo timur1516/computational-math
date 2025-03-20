@@ -1,0 +1,86 @@
+import math
+from typing import List
+
+from lab3.core.function import Function
+from lab3.dto.result import Result
+from lab3.settings.config import INIT_N, MAX_N, BREAKING_POINTS_ACCURACY, CONVERGENCE_EPS
+
+
+def calculate_integral(function: Function, a: float, b: float, eps: float, method, runge_k: int) -> Result:
+    n = INIT_N
+
+    result = method(function, a, b, eps, n)
+    delta = math.inf
+
+    while delta > eps:
+        if n >= MAX_N:
+            raise Exception(f'Произведено разбиение на {MAX_N} отрезков, но ответ не найден')
+
+        n *= 2
+
+        new_result = method(function, a, b, eps, n)
+        delta = abs(new_result - result) / (2 ** runge_k - 1)
+        result = new_result
+
+    return Result(result, n)
+
+
+def get_breaking_points(function: Function, a: float, b: float):
+    n = math.ceil((b - a) / BREAKING_POINTS_ACCURACY)
+    h = (b - a) / n
+
+    breaking_points = []
+
+    for i in range(n + 1):
+        x = a + i * h
+        if function.compute_or_none(x) is None:
+            breaking_points.append(x)
+
+    return breaking_points
+
+
+def is_converges(function: Function, breaking_points: List[float]) -> bool:
+    eps = CONVERGENCE_EPS
+
+    for p in breaking_points:
+        y1 = function.compute_or_none(p - eps)
+        y2 = function.compute_or_none(p + eps)
+        if y1 is not None and y2 is not None and abs(y1 - y2) > eps:
+            return False
+
+    return True
+
+
+def calculate_improper_integral(function: Function, a: float, b: float, eps: float, method: Function, runge_k: int,
+                                breaking_points: List[float]) -> Result:
+    conv_eps = CONVERGENCE_EPS
+
+    result = 0
+    iterations = 0
+
+    if a not in breaking_points:
+        b_ = breaking_points[0] - conv_eps
+        if function.compute_or_none(b_) is not None:
+            result_ = calculate_integral(function, a, b_, eps, method, runge_k)
+            result += result_.value
+            iterations += result_.iterations
+
+    if b not in breaking_points:
+        a_ = breaking_points[-1] + conv_eps
+        if function.compute_or_none(a_) is not None:
+            result_ = calculate_integral(function, a_, b, eps, method, runge_k)
+            result += result_.value
+            iterations += result_.iterations
+
+    for i in range(1, len(breaking_points)):
+        a_ = breaking_points[i] - conv_eps
+        b_ = breaking_points[i - 1] + conv_eps
+        y_a_ = function.compute_or_none(a_)
+        y_b_ = function.compute_or_none(b_)
+
+        if y_a_ is not None or y_b_ is not None:
+            result_ = calculate_integral(function, a_, b_, eps, method, runge_k)
+            result += result_.value
+            iterations += result_.iterations
+
+    return Result(result, iterations)

@@ -1,4 +1,4 @@
-from lab3.method.methods import rectangles_method_right, rectangles_method_left, rectangles_method_middle, \
+from lab3.core.methods import rectangles_method_right, rectangles_method_left, rectangles_method_middle, \
     trapezoid_method, simpson_method
 
 METHODS_STRS = ['Метод прямоугольников (левый)', 'Метод прямоугольников (правый)', 'Метод прямоугольников (средний)',

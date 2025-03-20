@@ -1,5 +1,5 @@
+from lab3.core.util import calculate_integral, get_breaking_points, is_converges, calculate_improper_integral
 from lab3.io.util import choose_options, read_float, print_result
-from lab3.method.util import calculate_integral
 from lab3.settings.constants import METHODS, METHODS_STRS, METHODS_RUNGE_K
 from lab3.settings.functions import FUNCTIONS
 
@@ -11,16 +11,33 @@ def main():
     a = read_float('Введите нижний предел интегрирования')
     b = read_float('Введите верхний предел интегрирования')
 
+    is_improper_integral = False
+
+    breaking_points = get_breaking_points(function, a, b)
+    if len(breaking_points) != 0:
+        print(f'Функция терпит разрыв в точках: {breaking_points}')
+        is_improper_integral = True
+
+    if is_improper_integral and not is_converges(function, breaking_points):
+        print('Интеграл расходится')
+        exit(0)
+
     method_id = choose_options('Выберите метод для интегрирования', METHODS_STRS) - 1
     method = METHODS[method_id]
     runge_k = METHODS_RUNGE_K[method_id]
 
     eps = read_float('Введите точность')
 
-    result = calculate_integral(function, a, b, eps, method, runge_k)
+    if not is_improper_integral:
+        result = calculate_integral(function, a, b, eps, method, runge_k)
+    else:
+        result = calculate_improper_integral(function, a, b, eps, method, runge_k, breaking_points)
 
     print_result(result)
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(e)
