@@ -3,7 +3,10 @@ from tabulate import tabulate
 from lab2.src.io.reader import FileReader, ConsoleReader
 from lab2.src.io.writer import ConsoleWriter, FileWriter
 from lab2.src.settings.constants import IO_METHODS
-from lab2.src.util.io_util import _round
+
+
+def round_(n, precision):
+    return "{:.{}f}".format(n, precision)
 
 
 def create_reader():
