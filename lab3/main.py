@@ -18,9 +18,8 @@ def main():
         print(f'Функция терпит разрыв в точках: {breaking_points}')
         is_improper_integral = True
 
-    if is_improper_integral and not is_converges(function, breaking_points):
-        print('Интеграл расходится')
-        exit(0)
+    if is_improper_integral and not is_converges(function, a, b, breaking_points):
+        raise Exception('Интеграл расходится')
 
     method_id = choose_options('Выберите метод для интегрирования', METHODS_STRS) - 1
     method = METHODS[method_id]

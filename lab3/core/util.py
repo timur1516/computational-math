@@ -30,22 +30,38 @@ def get_breaking_points(function: Function, a: float, b: float):
     h = (b - a) / n
 
     breaking_points = []
-
+    last_i = -2
     for i in range(n + 1):
         x = a + i * h
         if function.compute_or_none(x) is None:
+            if i - 1 == last_i and i != n:
+                raise Exception(
+                    "Фунция может быть неопределена только в некоторых точках.\nНа выбранном отрезке существуют области неопредедённости.\nИнтегрирование невозможно")
+            last_i = i
             breaking_points.append(x)
 
     return breaking_points
 
 
-def is_converges(function: Function, breaking_points: List[float]) -> bool:
+def is_converges(function: Function, a: float, b: float, breaking_points: List[float]) -> bool:
     eps = CONVERGENCE_EPS
 
-    for p in breaking_points:
+    breaking_points_tmp = breaking_points.copy()
+
+    if a in breaking_points_tmp:
+        breaking_points_tmp.remove(a)
+        if function.compute_or_none(a + eps) is None:
+            return False
+
+    if b in breaking_points_tmp:
+        breaking_points_tmp.remove(b)
+        if function.compute_or_none(b - eps) is None:
+            return False
+
+    for p in breaking_points_tmp:
         y1 = function.compute_or_none(p - eps)
         y2 = function.compute_or_none(p + eps)
-        if y1 is not None and y2 is not None and abs(y1 - y2) > eps:
+        if (y1 is not None and y2 is not None and abs(y1 - y2) > eps) or (y1 is None and y2 is None):
             return False
 
     return True

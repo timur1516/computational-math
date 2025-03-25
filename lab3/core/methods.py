@@ -30,7 +30,7 @@ def rectangles_method_middle(function: Function, a: float, b: float, eps: float,
     for i in range(1, n + 1):
         x_prev = a + (i - 1) * h
         x_i = a + i * h
-        x_h = (x_prev - x_i) / 2
+        x_h = (x_prev + x_i) / 2
         result += function.compute(x_h)
     result *= h
 
