@@ -1,7 +1,7 @@
 from lab3.core.function import Function
 
 
-def rectangles_method_right(function: Function, a: float, b: float, eps: float, n: int):
+def rectangles_method_right(function: Function, a: float, b: float, n: int):
     h = (b - a) / n
 
     result = 0
@@ -12,7 +12,7 @@ def rectangles_method_right(function: Function, a: float, b: float, eps: float, 
     return result
 
 
-def rectangles_method_left(function: Function, a: float, b: float, eps: float, n: int):
+def rectangles_method_left(function: Function, a: float, b: float, n: int):
     h = (b - a) / n
 
     result = 0
@@ -23,7 +23,7 @@ def rectangles_method_left(function: Function, a: float, b: float, eps: float, n
     return result
 
 
-def rectangles_method_middle(function: Function, a: float, b: float, eps: float, n: int):
+def rectangles_method_middle(function: Function, a: float, b: float, n: int):
     h = (b - a) / n
 
     result = 0
@@ -37,7 +37,7 @@ def rectangles_method_middle(function: Function, a: float, b: float, eps: float,
     return result
 
 
-def trapezoid_method(function: Function, a: float, b: float, eps: float, n: int):
+def trapezoid_method(function: Function, a: float, b: float, n: int):
     h = (b - a) / n
 
     result = (function.compute(a) + function.compute(b)) / 2
@@ -48,12 +48,12 @@ def trapezoid_method(function: Function, a: float, b: float, eps: float, n: int)
     return result
 
 
-def simpson_method(function: Function, a: float, b: float, eps: float, n: int):
+def simpson_method(function: Function, a: float, b: float, n: int):
     h = (b - a) / n
 
     result = function.compute(a) + function.compute(b)
     for i in range(1, n):
-        k = 2 if i % 2 == 1 else 4
+        k = 2 if i % 2 == 0 else 4
         result += k * function.compute(a + i * h)
     result *= h / 3
 

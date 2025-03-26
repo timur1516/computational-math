@@ -9,7 +9,7 @@ from lab3.settings.config import INIT_N, MAX_N, BREAKING_POINTS_ACCURACY, CONVER
 def calculate_integral(function: Function, a: float, b: float, eps: float, method, runge_k: int) -> Result:
     n = INIT_N
 
-    result = method(function, a, b, eps, n)
+    result = method(function, a, b, n)
     delta = math.inf
 
     while delta > eps:
@@ -18,7 +18,7 @@ def calculate_integral(function: Function, a: float, b: float, eps: float, metho
 
         n *= 2
 
-        new_result = method(function, a, b, eps, n)
+        new_result = method(function, a, b, n)
         delta = abs(new_result - result) / (2 ** runge_k - 1)
         result = new_result
 
