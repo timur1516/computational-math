@@ -43,6 +43,10 @@ def get_breaking_points(function: Function, a: float, b: float):
     return breaking_points
 
 
+def is_inf(x):
+    return abs(x) >= 1 / CONVERGENCE_EPS - 1 / BREAKING_POINTS_ACCURACY
+
+
 def is_converges(function: Function, a: float, b: float, breaking_points: List[float]) -> bool:
     eps = CONVERGENCE_EPS
 
@@ -50,18 +54,20 @@ def is_converges(function: Function, a: float, b: float, breaking_points: List[f
 
     if a in breaking_points_tmp:
         breaking_points_tmp.remove(a)
-        if function.compute_or_none(a + eps) is None:
+        y = function.compute_or_none(a + eps)
+        if y is None or is_inf(y):
             return False
 
     if b in breaking_points_tmp:
         breaking_points_tmp.remove(b)
-        if function.compute_or_none(b - eps) is None:
+        y = function.compute_or_none(b - eps)
+        if y is None or is_inf(y):
             return False
 
     for p in breaking_points_tmp:
         y1 = function.compute_or_none(p - eps)
         y2 = function.compute_or_none(p + eps)
-        if (y1 is not None and y2 is not None and abs(y1 - y2) > eps) or (y1 is None and y2 is None):
+        if (y1 is None and y2 is None) or (is_inf(y1) and is_inf(y2) and y1 * y2 > 0):
             return False
 
     return True
@@ -76,14 +82,16 @@ def calculate_improper_integral(function: Function, a: float, b: float, eps: flo
 
     if a not in breaking_points:
         b_ = breaking_points[0] - conv_eps
-        if function.compute_or_none(b_) is not None:
+        y = function.compute_or_none(b_)
+        if y is not None and not is_inf(y):
             result_ = calculate_integral(function, a, b_, eps, method, runge_k)
             result += result_.value
             iterations += result_.iterations
 
     if b not in breaking_points:
         a_ = breaking_points[-1] + conv_eps
-        if function.compute_or_none(a_) is not None:
+        y = function.compute_or_none(a_)
+        if y is not None and not is_inf(y):
             result_ = calculate_integral(function, a_, b, eps, method, runge_k)
             result += result_.value
             iterations += result_.iterations
@@ -94,7 +102,7 @@ def calculate_improper_integral(function: Function, a: float, b: float, eps: flo
         y_a_ = function.compute_or_none(a_)
         y_b_ = function.compute_or_none(b_)
 
-        if y_a_ is not None and y_b_ is not None:
+        if y_a_ is not None and y_b_ is not None and not (is_inf(y_a_) and is_inf(y_b_) and y_a_ * y_b_ > 0):
             result_ = calculate_integral(function, a_, b_, eps, method, runge_k)
             result += result_.value
             iterations += result_.iterations
