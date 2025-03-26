@@ -11,6 +11,11 @@ def main():
     a = read_float('Введите нижний предел интегрирования')
     b = read_float('Введите верхний предел интегрирования')
 
+    is_inv = False
+    if b < a:
+        a, b = b, a
+        is_inv = True
+
     is_improper_integral = False
 
     breaking_points = get_breaking_points(function, a, b)
@@ -31,6 +36,9 @@ def main():
         result = calculate_integral(function, a, b, eps, method, runge_k)
     else:
         result = calculate_improper_integral(function, a, b, eps, method, runge_k, breaking_points)
+
+    if is_inv:
+        result.value *= -1
 
     print_result(result)
 

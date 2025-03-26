@@ -94,7 +94,7 @@ def calculate_improper_integral(function: Function, a: float, b: float, eps: flo
         y_a_ = function.compute_or_none(a_)
         y_b_ = function.compute_or_none(b_)
 
-        if y_a_ is not None or y_b_ is not None:
+        if y_a_ is not None and y_b_ is not None:
             result_ = calculate_integral(function, a_, b_, eps, method, runge_k)
             result += result_.value
             iterations += result_.iterations
