@@ -14,7 +14,7 @@ def draw_equation(x0, left, right, equation):
     plt.plot(x, y, label=f'f(x)', color='blue')
 
     y0 = equation.f(x0)
-    plt.scatter([x0], [y0], label=f'({_round(x0, 3)}; {_round(y0, 3)})', color='red', s=50)
+    plt.scatter([x0], [y0], label=f'({round(x0, 3)}; {round(y0, 3)})', color='red', s=50)
 
     x_l = left
     y_l = equation.f(x_l)
@@ -54,8 +54,8 @@ def draw_system(x0, point, system):
     plt.contour(x, y, f, levels=[0], colors='blue')
     plt.contour(x, y, g, levels=[0], colors='green')
 
-    plt.scatter([x0[0]], [x0[1]], label=f'({_round(x0[0], 3)}; {_round(x0[1], 3)})', color='red', s=50)
-    plt.scatter([point[0]], [point[1]], label=f'({_round(point[0], 3)}; {_round(point[1], 3)})', color='black', s=50)
+    plt.scatter([x0[0]], [x0[1]], label=f'({round(x0[0], 3)}; {round(x0[1], 3)})', color='red', s=50)
+    plt.scatter([point[0]], [point[1]], label=f'({round(point[0], 3)}; {round(point[1], 3)})', color='black', s=50)
 
     plt.axhline(0, color='black')
     plt.axvline(0, color='black')
