@@ -27,5 +27,6 @@ def draw_plot(x, y, phis, names):
     plt.ylabel('y')
     plt.legend()
     plt.grid(True)
+    plt.tight_layout()
 
     plt.show()
