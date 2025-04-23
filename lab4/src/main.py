@@ -18,7 +18,7 @@ def main():
     phis = []
     phis_names = []
 
-    max_abs_r2 = 0
+    min_mse = 1e10
     best_approximation_function_index = None
 
     result = []
@@ -44,8 +44,8 @@ def main():
         r2 = coefficient_of_determination(x, y, phi, n)
         s = measure_of_deviation(x, y, phi)
 
-        if abs(r2) > max_abs_r2:
-            max_abs_r2 = abs(r2)
+        if mse < min_mse:
+            min_mse = mse
             best_approximation_function_index = i
 
         log.append(f'Функция: φ(x) = {phi_str}')
