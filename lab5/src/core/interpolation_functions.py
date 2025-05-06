@@ -37,6 +37,9 @@ def newton_divided_difference_polynomial(x, y):
 
 
 def _first_gauss_polynomial(x, y):
+    if len(x) <= 1:
+        raise Exception('Должно быть минимум две точки')
+
     n = len(x)
     h = x[1] - x[0]
     alpha_ind = n // 2
@@ -68,6 +71,9 @@ def _first_gauss_polynomial(x, y):
 
 
 def _second_gauss_polynomial(x, y):
+    if len(x) <= 1:
+        raise Exception('Должно быть минимум две точки')
+
     n = len(x)
     h = x[1] - x[0]
     alpha_ind = n // 2
@@ -96,6 +102,8 @@ def _second_gauss_polynomial(x, y):
 
 
 def gauss_polynomial(x, y):
+    if len(x) <= 1:
+        raise Exception('Должно быть минимум две точки')
     if not is_finite_difference(x):
         raise Exception('Значения X должны иметь фиксированный шаг!')
 
@@ -111,6 +119,8 @@ def gauss_polynomial(x, y):
 
 
 def stirling_polynomial(x, y):
+    if len(x) <= 1:
+        raise Exception('Должно быть минимум две точки')
     if len(x) % 2 != 1:
         raise Exception('Число узлов должно быть нечетным')
     if not is_finite_difference(x):
@@ -125,36 +135,28 @@ def stirling_polynomial(x, y):
 
 
 def bessel_polynomial(x, y):
+    if len(x) <= 1:
+        raise Exception('Должно быть минимум две точки')
     if len(x) % 2 != 0:
-        raise Exception('Число узлов должно быть четным')
+        raise Exception('Число узлов должно быть чётным')
     if not is_finite_difference(x):
-        raise Exception('Значения X должны иметь фиксированный шаг!')
+        raise Exception('Значения X должны иметь фиксированный шаг')
 
     n = len(x)
-    diffs = calculate_finite_difference_table(y)
     h = x[1] - x[0]
-    alpha_ind = n // 2
+    alpha_ind = n // 2 - 1
+    diffs = calculate_finite_difference_table(y)
 
     def p(x_):
-        t = (x_ - x[alpha_ind]) / h
-        result = 0
-
-        for k in range(n):
-            m = (k + 1) // 2
-
-            nominator = 1
-            for j in range(-m, m):
-                nominator *= t + j
-            if k == 2 * m - 1: nominator *= t - 0.5
-
-            factorial = 1
-            for j in range(1, k + 1):
-                factorial *= j
-
-            if k == 2 * m:
-                result += ((diffs[alpha_ind - m][k] + diffs[alpha_ind - (m - 1)][k]) / 2) * (nominator / factorial)
-            else:
-                result += diffs[alpha_ind - m][k] * (nominator / factorial)
+        t = (x_ - (x[alpha_ind] + x[alpha_ind + 1]) / 2) / h
+        result = (y[alpha_ind] + y[alpha_ind + 1]) / 2
+        result += (t - 0.5) * diffs[alpha_ind][1]
+        if alpha_ind > 0:
+            result += (t * (t - 1) / (1 * 2)) * ((diffs[alpha_ind - 1][2] + diffs[alpha_ind][2]) / 2)
+            result += ((t - 0.5) * t * (t - 1) / (1 * 2 * 3)) * diffs[alpha_ind - 1][3]
+        if alpha_ind > 1:
+            result += ((t * (t - 1) * (t + 1) * (t - 2) / (1 * 2 * 3 * 4)) *
+                       ((diffs[alpha_ind - 2][4] + diffs[alpha_ind - 1][4]) / 2))
         return result
 
     return p

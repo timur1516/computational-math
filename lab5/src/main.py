@@ -1,4 +1,3 @@
-from lab5.src.core.interpolation_functions import bessel_polynomial, stirling_polynomial
 from lab5.src.core.util import calculate_finite_difference_table
 from lab5.src.io.util import choose_options, print_finite_difference_table, print_result
 from lab5.src.settings.constants import DATA_SOURCES, INTERPOLATION_FUNCTIONS, INTERPOLATION_FUNCTIONS_NAMES
@@ -38,9 +37,8 @@ def main():
 
         result.append(f'Интерполирующая функция: {name}\nP({x0}) = {p(x0)}')
 
-        if f not in [bessel_polynomial, stirling_polynomial]:
-            interpolation_polynomes.append(p)
-            interpolation_polynomes_names.append(name)
+        interpolation_polynomes.append(p)
+        interpolation_polynomes_names.append(name)
 
     print_result(result)
 
