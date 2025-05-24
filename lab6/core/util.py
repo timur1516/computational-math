@@ -9,6 +9,8 @@ def solve_one_step(equation, method, p, x0, xn, n, y0, eps):
         y = method(equation, x, y0)
     except OverflowError:
         raise Exception('Не удалось вычислить, слишком большие значения')
+    except ZeroDivisionError:
+        raise Exception('В ходе поиска решения произошло деление на ноль')
 
     while error > eps:
         if n > MAX_N:
@@ -36,6 +38,8 @@ def solve_multy_step(equation, method, solution, x0, xn, n, y0, eps):
         y = method(equation, x, y0, eps)
     except OverflowError:
         raise Exception('Не удалось вычислить, слишком большие значения')
+    except ZeroDivisionError:
+        raise Exception('В ходе поиска решения произошло деление на ноль')
 
     while error > eps:
         if n > MAX_N:
