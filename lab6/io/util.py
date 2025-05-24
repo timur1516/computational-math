@@ -42,8 +42,8 @@ def read_positive_integer(message):
     while value is None:
         try:
             value = int(input(f'{message}: '))
-            if value <= 0:
-                print('Значение должно быть > 0')
+            if value <= 1:
+                print('Значение должно быть > 1')
                 value = None
         except:
             print('Значение должно быть целым числом!')

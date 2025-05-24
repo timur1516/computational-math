@@ -12,7 +12,7 @@ def main():
     solution = EQUATIONS_SOLUTIONS[equation_id]
 
     x0 = read_float('Введите первый элемент интервала')
-    xn = read_float('Введите второй элемент интервала')
+    xn = read_float('Введите последний элемент интервала')
 
     if x0 > xn:
         x0, xn = xn, x0

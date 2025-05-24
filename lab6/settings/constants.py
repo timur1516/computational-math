@@ -1,31 +1,24 @@
 from math import exp, sin, cos
 
-from lab6.core.methods import euler_method, milne_method, improved_euler_method, second_order_runge_kutta_method, \
-    fourth_order_runge_kutta_method, adams_method
+from lab6.core.methods import euler_method, improved_euler_method, milne_method
 
 ONE_STEP_METHODS = [
     euler_method,
-    improved_euler_method,
-    second_order_runge_kutta_method,
-    fourth_order_runge_kutta_method
+    improved_euler_method
 ]
 
 ONE_STEP_METHODS_NAMES = [
     'Метод Эйлера',
-    'Модифицированный метод Эйлера',
-    'Метод Рунге-Кутты 2-го порядка',
-    'Метод Рунге-Кутты 4-го порядка',
+    'Модифицированный метод Эйлера'
 ]
 
-RUNGE_P = [1, 2, 2, 4]
+RUNGE_P = [1, 2]
 
 MULTY_STEP_METHODS = [
-    adams_method,
     milne_method
 ]
 
 MULTY_STEP_METHODS_NAMES = [
-    'Метод Адамса',
     'Метод Милна'
 ]
 
